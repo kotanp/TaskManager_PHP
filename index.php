@@ -22,15 +22,10 @@ $db = $database->connect();
 //$task = new Task($db);
 Model::$connection=$db;
 $routes = new Route();
-
+$routes->resolve();
 // $id = isset($_GET['id'])?$_GET['id']:die();
 
 // $single_task = TaskController::show($id);
 // $row = $single_task->fetch(PDO::FETCH_ASSOC);
 // echo json_encode($row);
 
-Route::get('/tasks',TaskController::index());
-Route::get('/task',TaskController::show(2));
-//Route::post('/store',TaskController::store());
-
-$routes->run();

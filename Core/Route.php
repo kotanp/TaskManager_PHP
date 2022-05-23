@@ -14,21 +14,22 @@ class Route{
         self::$routes['POST'][$path] = $callback;
     }
 
-    public function run(){
+    public function resolve(){
         $requestUri = parse_url($_SERVER['REQUEST_URI']);
         $requestPath = $requestUri['path'];
         $requestMethod = $_SERVER['REQUEST_METHOD'];
-        //$requestQuery = $requestUri['query'];
-        $callback = null;
-        foreach (self::$routes[$requestMethod] as $key => $value) {
-            if ($key === $requestPath) {
-                $callback = $value;
-            }
-        }
+        // foreach (self::$routes[$requestMethod] as $route => $callback) {
+        //     if (preg_match_all('/{\w+}/',$route,$matches)) {
+        //         echo $route;
+        //     }
+        // }
+        
+        $callback = self::$routes[$requestMethod][$requestPath];
 
         if ($callback instanceof Closure) {
             return include_once($callback());
         }
-        echo $callback;
+
+        echo call_user_func($callback);
     }
 }

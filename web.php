@@ -10,4 +10,7 @@ Route::get('/',function(){
     return 'View/index.php';
 });
 
-//Route::get('/tasks',TaskController::index());
+Route::get('/tasks',[TaskController::class, 'index']);
+// Route::get('/task/{id}',[TaskController::class, 'show']);
+// Route::get('/user/{id}',[TaskController::class, 'show']);
+Route::post('/store',[TaskController::class, 'store']);
