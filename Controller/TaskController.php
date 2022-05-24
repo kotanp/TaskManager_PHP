@@ -46,4 +46,9 @@ class TaskController{
         Task::delete($taskId);
     }
 
+    public static function expandUser(){
+        $tasks = Task::expand('users','userId','id','user');
+        return $tasks;
+    }
+
 }

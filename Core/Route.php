@@ -15,7 +15,7 @@ class Route{
     }
 
     public static function put($path, $callback){
-        self::$routes['POST'][$path] = $callback;
+        self::$routes['PUT'][$path] = $callback;
     }
 
     public static function delete($path, $callback){
@@ -49,7 +49,7 @@ class Route{
         if ($callback instanceof Closure) {
             return include_once($callback());
         }
-
+        header('Content-Type: application/json');
         echo call_user_func($callback);
     }
 }

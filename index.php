@@ -26,4 +26,7 @@ $routes->resolve();
 // $single_task = TaskController::show($id);
 // $row = $single_task->fetch(PDO::FETCH_ASSOC);
 // echo json_encode($row);
+function csrf_token(){
+    return md5(uniqid(mt_rand(), true));
+}
 

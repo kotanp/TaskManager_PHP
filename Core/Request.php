@@ -7,7 +7,13 @@ class Request{
 
     function __construct()
     {
-        $this->data = $_POST;
+        if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
+            parse_str(file_get_contents('php://input'),$input);
+            $this->data = $input;
+        }
+        else{
+            $this->data = $_POST;
+        }
     }
 
     public function getData(){

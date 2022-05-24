@@ -6,8 +6,9 @@ use PDO;
 abstract class Model{
     public static $connection;
     protected static $table;
-    // protected $primaryKey = 'id';
+    //protected $primaryKey = 'id';
     // protected $keyType = 'int';
+    //protected $foreignKey;
 
     public static function all(){
         $query = 'SELECT * FROM ' . static::$table;
@@ -80,6 +81,23 @@ abstract class Model{
         }
         
         return $columnNames;
+    }
+
+    public static function expand($tableJoined, $localKey, $foreignKey, $relationName){
+        //$query = 'SELECT * FROM ' . static::$table . ' INNER JOIN ' . $tableJoined . ' ON ' . static::$table . '.' . $localKey . '=' . $tableJoined . '.' . $foreignKey;
+        $query = 'SELECT * FROM ' . static::$table;
+        $queryJoined = 'SELECT * FROM ' . $tableJoined;
+        $statement = self::$connection->query($query)->fetchAll(PDO::FETCH_ASSOC);
+        $statementJoined = self::$connection->query($queryJoined)->fetchAll(PDO::FETCH_ASSOC);
+        for ($i=0; $i <count($statement) ; $i++) { 
+            $row = $statement[$i];
+            $statement[$i][$relationName] = array_values(array_filter($statementJoined, function($statementJoinedRow) use($row,$localKey,$foreignKey){
+                if ($row[$localKey] === $statementJoinedRow[$foreignKey]) {
+                    return $statementJoinedRow;
+                }
+            }));
+        }
+        return json_encode($statement);
     }
 
 }
