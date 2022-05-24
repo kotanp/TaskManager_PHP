@@ -25,12 +25,15 @@ abstract class Model{
         return json_encode($rows);
     }
 
-    public static function update($taskId){
-        $query = 'SELECT * FROM ' . static::$table . ' WHERE id='.$taskId;
+    public static function update(Model $model, $taskId){
+        $setString = '';
+        foreach ($model as $column => $value) {
+            $setString = $setString . $column . '="' . $value . '",';
+        }
+        $setString = substr_replace($setString,'',-1);
+        $query = 'UPDATE ' . static::$table . ' SET ' . $setString . ' WHERE id='.$taskId;
         $statement = self::$connection->prepare($query);
         $statement->execute();
-        $rows = $statement->fetch(PDO::FETCH_ASSOC);
-        return json_encode($rows);
     }
 
     public static function save(Model $model){
@@ -47,7 +50,6 @@ abstract class Model{
         if ($statement->execute()) {
             return true;
         }
-        
         return false;
     }
 
@@ -55,7 +57,10 @@ abstract class Model{
         $query = 'DELETE FROM ' . static::$table . ' WHERE id='.$taskId;
         $statement = self::$connection->prepare($query);
         $statement->execute();
-        $statement->fetch(PDO::FETCH_ASSOC);
+        if ($statement->execute()) {
+            return true;
+        }
+        return false;
     }
 
     public static function getColumnCount(){

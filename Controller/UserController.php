@@ -2,18 +2,18 @@
 
 namespace App\Controller;
 
-use App\Model\Task;
+use App\Model\User;
 use App\Core\Request;
 
-class TaskController{
+class UserController{
 
     public static function index(){
-        $tasks = Task::all();
+        $tasks = User::all();
         return $tasks;
     }
 
     public static function show($taskId){
-        $task = Task::find($taskId);
+        $task = User::find($taskId);
         return $task;
     }
 
@@ -21,17 +21,17 @@ class TaskController{
     public static function store(){
         $request = new Request();
         $data = $request->getData();
-        $task = new Task();
+        $task = new User();
         $task->title = $data['title'];
         $task->description = $data['description'];
         $task->end_date = $data['end_date'];
         $task->userId = $data['userId'];
         $task->status = $data['status'];
-        Task::save($task);
+        User::save($task);
     }
 
     public static function update($taskId){
-        $task = new Task();
+        $task = new User();
         $request = new Request();
         $data = $request->getData();
         $task->title = $data['title'];
@@ -39,11 +39,11 @@ class TaskController{
         $task->end_date = $data['end_date'];
         $task->userId = $data['userId'];
         $task->status = $data['status'];
-        Task::update($task, $taskId);
+        User::update($task, $taskId);
     }
 
     public static function destroy($taskId){
-        Task::delete($taskId);
+        User::delete($taskId);
     }
 
 }
